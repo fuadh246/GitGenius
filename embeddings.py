@@ -2,7 +2,6 @@ import tiktoken
 import os
 from langchain.embeddings import OpenAIEmbeddings  # Uncomment this import
 
-
 openai_api_key = os.environ.get("OPENAI_API_KEY")
 if openai_api_key is None:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
@@ -10,6 +9,8 @@ print("OpenAI API key is set")
 print("Embedding contents...")
 print("This may take a while...")
 print("========================================")
+
+
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
     """Returns the number of tokens in a text string."""
     encoding = tiktoken.get_encoding(encoding_name)

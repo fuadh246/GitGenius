@@ -92,13 +92,3 @@ def embed_texts(openai_api_key, preprocessed_contents, batch_size=1000, delay=10
             print(f"Embedded {fname}")
 
     return embedded_contents
-
-# Example usage
-if __name__ == "__main__":
-    repo_url = 'https://github.com/fuadh246/GitGenius'  # Replace with your GitHub repository URL
-    clone_dir = os.path.join(os.getcwd(), 'cloned_repo')  # Define the path for the cloned repository
-    clone_dir = clone_repo(repo_url, clone_dir)
-    preprocessed_contents = read_files_from_repo(clone_dir)
-    openai_api_key = os.environ.get("OPENAI_API_KEY")  # Ensure you have your API key set
-    print(f"Total files: {len(preprocessed_contents)}")
-    embedded_contents = embed_texts(openai_api_key, preprocessed_contents)

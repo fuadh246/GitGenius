@@ -1,4 +1,5 @@
 import openai
+import os
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains.qa_with_sources.loading import load_qa_with_sources_chain
@@ -8,12 +9,11 @@ from langchain_community.chat_models import ChatOpenAI
 
 
 
-openai.api_key = api_key    #input your api key here
+openai.api_key = os.environ.get("OPENAI_API_KEY")    #input your api key here
 
 prompt= f'''You are given project code files.
 
 Given the query specified here: {query},
-
 
 Analyze the code files and output the response
 '''
@@ -21,7 +21,7 @@ Analyze the code files and output the response
 
 query=""
 
-embeddings= OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings()
 
 db= FAISS(embeddings, docstore) #input vector database credentials here
 

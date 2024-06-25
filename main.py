@@ -13,7 +13,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatOpenAI
 
-from gitgenius import clone_repo, read_files_from_repo, embed_texts
+from GitClone import clone_repo, read_files_from_repo
 
 
 
@@ -24,6 +24,26 @@ if __name__ == "__main__":
     clone_dir = clone_repo(repo_url, clone_dir)
     preprocessed_contents = read_files_from_repo(clone_dir)
     openai_api_key = os.environ.get("OPENAI_API_KEY")  # Ensure you have your API key set
-    print(f"Total files: {len(preprocessed_contents)}")
-    embedded_contents = embed_texts(openai_api_key, preprocessed_contents)
+    
+    embeddings_instance = OpenAIEmbeddings(api_key=openai_api_key)
+    
+    db = FAISS.from_documents(documents= preprocessed_contents, embedding=embeddings_instance)
+    db.save_local(os.path.join(os.getcwd(), "vector_database/"))
+    vectorStore = FAISS.load_local("vector_database/", embeddings_instance)
+    
+    retriever = vectorStore.as_retriever(search_type="similarity", search_kwargs={'k':5})
+    
+    prompt= f'''You are given project code files. Given the query specified here: {query}, Analyze the code files and output the response.'''
+    
+    query="how do i clone git repo?"
+    
+    llm= ChatOpenAI()
+    
+    chain= load_qa_with_sources_chain(llm=llm, chain_type="stuff")
+    
+    docs = retriever.get_relevant_documents(query)
+    
+    result = chain.run(input_documents=docs, question=query)
+    
+    print(result)
     

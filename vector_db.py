@@ -1,8 +1,10 @@
 from langchain.vectorstores import FAISS
 
-db= FAISS.from_documents(documents= pages,embedding= #embedding model there)
+
+
+db = FAISS.from_documents(documents= pages,embedding= #embedding model there)
                          
-db.save_local(#path on computer to save database)
+db.save_local('./')
     
 
 ###################### LOAD DATABASE BACK############################

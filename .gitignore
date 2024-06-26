@@ -163,5 +163,6 @@ cython_debug/
 
 repo_contents/
 cloned_repo/
+vector_database/
 .vscode
 .DS_store
